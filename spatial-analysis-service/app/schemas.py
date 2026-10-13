@@ -18,6 +18,8 @@ class Point (BaseModel):
     lon: float=Field(ge=-180, le=180)
 
 class AnalyzeRequest(BaseModel):
+    #Klijent šalje POST zahtev sa JSON telon i taj zahtev (objekat) se pretvara u objekat AnalyzeRequest klase
+    #Pre nego što objekat ove klase nastane, FastAPI proveri da li je JSON telo prema pravilima iz schemas.py
     #Senzori mogu biti izostavljeni: prazna lista
     sensors: List [Sensor]=Field(default_factory=list)
     points: List[Point]=Field(max_length=10_000) #Max 10.000 tačaka: potrošnja memorije DBSCAN-a raste približno kvadratno
@@ -30,7 +32,7 @@ class AnalyzeRequest(BaseModel):
 class Cluster(BaseModel):
     cluster_id: int
     size: int
-    lat: float #težište žarišta/klastera
+    lat: float #težište žarišta/klastera(hotspota)
     lon: float
     nearest_sensor_id: Optional[str] #None ako uopšte nema senzora
     nearest_sensor_distance_m: Optional[float]
