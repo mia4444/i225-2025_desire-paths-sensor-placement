@@ -104,3 +104,9 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
+
+  spatial-analysis:
+    build: spatial-analysis-service
+    mem_limit: 1g
+    ports:
+      - "7010:8080"

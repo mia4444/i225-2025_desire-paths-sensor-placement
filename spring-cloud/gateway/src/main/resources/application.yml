@@ -3,6 +3,7 @@ server.port: 8080
 spring.application.name: gateway
 
 app.eureka-server: localhost
+app.spatial-analysis-url: http://localhost:7010
 
 eureka:
   client:
@@ -30,6 +31,11 @@ spring.cloud.gateway.routes:
   uri: lb://telemetry
   predicates:
   - Path=/telemetry/**
+
+- id: spatial-analysis
+  uri: ${app.spatial-analysis-url}
+  predicates:
+    - Path=/spatial/**
 
 - id: eureka-api
   uri: http://${app.eureka-server}:8761
@@ -85,5 +91,6 @@ logging:
 
 ---
 spring.config.activate.on-profile: docker
+app.spatial-analysis-url: http://spatial-analysis:8080
 
 app.eureka-server: eureka

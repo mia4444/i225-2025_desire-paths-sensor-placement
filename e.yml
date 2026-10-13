@@ -1,0 +1,49 @@
+[1mdiff --git a/docker-compose.yml b/docker-compose.yml[m
+[1mindex 9b893aa..c2292f6 100644[m
+[1m--- a/docker-compose.yml[m
+[1m+++ b/docker-compose.yml[m
+[36m@@ -103,4 +103,10 @@[m [mservices:[m
+       - SPRING_PROFILES_ACTIVE=docker[m
+     depends_on:[m
+       mongodb:[m
+[31m-        condition: service_healthy[m
+\ No newline at end of file[m
+[32m+[m[32m        condition: service_healthy[m
+[32m+[m
+[32m+[m[32m  spatial-analysis:[m
+[32m+[m[32m    build: spatial-analysis-service[m
+[32m+[m[32m    mem_limit: 1g[m
+[32m+[m[32m    ports:[m
+[32m+[m[32m      - "7010:8080"[m
+\ No newline at end of file[m
+[1mdiff --git a/spring-cloud/gateway/src/main/resources/application.yml b/spring-cloud/gateway/src/main/resources/application.yml[m
+[1mindex 249f631..00ad41b 100644[m
+[1m--- a/spring-cloud/gateway/src/main/resources/application.yml[m
+[1m+++ b/spring-cloud/gateway/src/main/resources/application.yml[m
+[36m@@ -3,6 +3,7 @@[m [mserver.port: 8080[m
+ spring.application.name: gateway[m
+ [m
+ app.eureka-server: localhost[m
+[32m+[m[32mapp.spatial-analysis-url: http://localhost:7010[m
+ [m
+ eureka:[m
+   client:[m
+[36m@@ -31,6 +32,11 @@[m [mspring.cloud.gateway.routes:[m
+   predicates:[m
+   - Path=/telemetry/**[m
+ [m
+[32m+[m[32m- id: spatial-analysis[m
+[32m+[m[32m  uri: ${app.spatial-analysis-url}[m
+[32m+[m[32m  predicates:[m
+[32m+[m[32m    - Path=/spatial/**[m
+[32m+[m
+ - id: eureka-api[m
+   uri: http://${app.eureka-server}:8761[m
+   predicates:[m
+[36m@@ -85,5 +91,6 @@[m [mlogging:[m
+ [m
+ ---[m
+ spring.config.activate.on-profile: docker[m
+[32m+[m[32mapp.spatial-analysis-url: http://spatial-analysis:8080[m
+ [m
+ app.eureka-server: eureka[m
